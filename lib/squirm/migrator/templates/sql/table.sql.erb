@@ -1,0 +1,14 @@
+DROP TABLE IF EXISTS <%= table.quoted_name %> CASCADE;
+
+CREATE TABLE <%= table.quoted_name -%> (
+<% table.columns.map do |column| -%>
+<% comma = column == table.columns.last ? "" : "," -%>
+  <%= "%-#{column_padding}s%s%s" % [column.quoted_name, column.definition, comma] %>
+<% end -%>
+);
+
+<% table.columns.each do |column| -%>
+<% column.templates.each do |template| -%>
+<%= template.render %>
+<% end -%>
+<% end -%>

@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+# Leave this for now for dev purposes.
+require "bundler/setup"
+
+require "squirm/migrator"
+require "thor"
+
+module Squirm
+
+  module Migrator
+
+    class CLI < Thor
+
+      desc "table [name] [column list]", "Outputs a table definition"
+      method_option :api, :aliases => "-a", :desc => "Include Squirm::Model API"
+      def table(name, *columns)
+        layout = Template.from_path("sql/layout.sql.erb")
+        table = Table.new(name).add_column(*columns)
+        output = layout.render do
+          buffer = table.template.render
+          if options[:api]
+            buffer << table.api.map(&:render).join
+          end
+          buffer
+        end
+        print output
+      end
+    end
+  end
+end
+Squirm::Migrator::CLI.start
+

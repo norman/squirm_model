@@ -1,0 +1,20 @@
+<% cols = table.columns.select {|col| col.type.creatable}.sort_by(&:name) %>
+
+CREATE FUNCTION <%= Squirm.quote_ident(table.name) %>."create"(
+    <%= cols.map {|c| "_#{c.name} #{c.type.sql}" }.join(",\n    ") %>
+  ) RETURNS integer AS $$
+  DECLARE
+    new_id integer;
+  BEGIN
+    INSERT INTO <%= Squirm.quote_ident(table.name) %> (
+      <%= cols.map(&:name).join(",\n      ") %>
+    ) 
+    VALUES (
+      <%= cols.map {|c| "_#{c.name}"}.join(",\n      ") %>
+    ) 
+    RETURNING id INTO new_id;
+    IF FOUND THEN
+      RETURN new_id;
+    END IF;
+  END;
+$$ LANGUAGE 'plpgsql';

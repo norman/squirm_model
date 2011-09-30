@@ -1,0 +1,12 @@
+<% function_name = Squirm.quote_ident("update_#{table.name}_#{column.name}_timestamp") -%>
+CREATE OR REPLACE FUNCTION <%= function_name %>()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    NEW.<%= column.name %> = NOW();
+    RETURN NEW;
+  END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER <%= function_name %>
+  BEFORE INSERT ON <%= table.quoted_name %>
+  FOR EACH ROW EXECUTE PROCEDURE <%= function_name %>();

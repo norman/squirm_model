@@ -1,0 +1,5 @@
+CREATE FUNCTION <%= Squirm.quote_ident(table.name) %>."get"(_id integer) RETURNS SETOF <%= Squirm.quote_ident(table.name) %> AS $$
+  BEGIN
+    RETURN QUERY SELECT * FROM <%= Squirm.quote_ident(table.name) %> WHERE id = _id;
+  END;
+$$ LANGUAGE 'plpgsql' STABLE;

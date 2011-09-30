@@ -1,0 +1,14 @@
+<% cols = table.columns.select {|col| col.type.updatable}.sort_by(&:name) %>
+<% table_name = Squirm.quote_ident(table.name) %>
+
+CREATE FUNCTION <%= table_name %>."update"(
+    _id integer,
+    <%= cols.map {|c| "_#{c.name} #{c.type.sql}" }.join(",\n    ") %>
+  ) RETURNS void AS $$
+  BEGIN
+    UPDATE <%= table_name %> SET
+      <%= cols.map {|c| "#{c.name} = _#{c.name}"}.join(",\n      ") %>
+    WHERE id = _id;
+    RETURN;
+  END;
+$$ LANGUAGE 'plpgsql';

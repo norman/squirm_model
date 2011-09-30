@@ -1,0 +1,2 @@
+<% index_name = Squirm.quote_ident([table.name, column.name, "index"].join("_")) %>
+CREATE INDEX <%= index_name %> ON <%= table.quoted_name %> (<%= column.quoted_name %>);

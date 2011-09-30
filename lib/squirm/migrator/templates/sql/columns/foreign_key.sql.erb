@@ -1,0 +1,7 @@
+/*
+ALTER TABLE <%= table.quoted_name %> ADD CONSTRAINT <%= Squirm.quote_ident(column.name + "_fkey") %>
+  FOREIGN KEY (<%= column.quoted_name %>)
+  REFERENCES <%= Squirm.quote_ident(column.name.split("_")[0]) %> (<%= Squirm.quote_ident(column.name.split("_")[1]) %>)
+  ON DELETE RESTRICT
+  INITIALLY DEFERRED;
+*/

@@ -1,0 +1,10 @@
+<% table_name = Squirm.quote_ident(table.name) %>
+
+CREATE FUNCTION <%= table_name %>."delete"(_id integer) RETURNS void AS $$
+  BEGIN
+    DELETE FROM <%= table_name %> WHERE id = _id;
+    IF NOT FOUND THEN
+      RAISE EXCEPTION 'no such record in table <%= table_name %>: %', _id;
+    END IF;
+  END;
+$$ LANGUAGE 'plpgsql';

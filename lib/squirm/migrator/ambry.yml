@@ -1,0 +1,124 @@
+---
+"Squirm::Migrator::Column::Type":
+  :serial:
+    :definition: "SERIAL NOT NULL PRIMARY KEY"
+    :priority: 10
+    :creatable: false
+    :updatable: false
+    :findable: false
+    :sql: integer
+    :patterns:
+      - !ruby/regexp /\Aid\z/
+  :user_name:
+    :definition: "VARCHAR(32) NOT NULL UNIQUE"
+    :priority: 10
+    :creatable: true
+    :updatable: true
+    :findable: true
+    :sql: text
+    :patterns:
+      - !ruby/regexp /\A(user_name|login)\z/
+  :int:
+    :definition: "INTEGER NOT NULL"
+    :priority: 10
+    :creatable: true
+    :updatable: true
+    :findable: false
+    :sql: integer
+    :patterns:
+      - !ruby/regexp /_count\z/
+  :timestamp:
+    :definition: "TIMESTAMP WITH TIME ZONE"
+    :priority: 9
+    :creatable: true
+    :updatable: true
+    :findable: false
+    :sql: text
+    :patterns:
+      - !ruby/regexp /_(at|time|on)\z/
+  :created:
+    :definition: "TIMESTAMP WITH TIME ZONE NOT NULL"
+    :priority: 10
+    :templates: ["sql/columns/created"]
+    :creatable: false
+    :updatable: false
+    :findable: false
+    :sql: text
+    :patterns:
+      - !ruby/regexp /creat(ed|ion)_(at|on|time)\z/
+      - !ruby/regexp /\Atime_created\z/
+  :email:
+    :definition: "VARCHAR(64) NOT NULL UNIQUE"
+    :priority: 10
+    :creatable: true
+    :updatable: true
+    :findable: true
+    :sql: text
+    :patterns:
+      - !ruby/regexp /email\z/
+  :geo:
+    :definition: "NUMERIC(18,12)"
+    :priority: 10
+    :creatable: true
+    :updatable: true
+    :findable: false
+    :sql: numeric
+    :patterns:
+      - !ruby/regexp /_?(lat|lng|lon|latitude|longitude)\z/
+  :default:
+    :definition: "VARCHAR(256)"
+    :priority: 0
+    :creatable: true
+    :updatable: true
+    :findable: false
+    :sql: text
+    :patterns:
+      - !ruby/regexp /.*/
+  :text:
+    :definition: "TEXT"
+    :priority: 10
+    :creatable: true
+    :updatable: true
+    :findable: false
+    :sql: text
+    :patterns:
+      - !ruby/regexp /_?(body|text|json|html|xml|description|bio|profile)/
+  :boolean:
+    :definition: "BOOLEAN NOT NULL"
+    :priority: 10
+    :creatable: true
+    :updatable: true
+    :findable: false
+    :sql: bool
+    :patterns:
+      - !ruby/regexp /(is|has)_.*/
+  :date:
+    :definition: "DATE"
+    :priority: 10
+    :creatable: true
+    :updatable: true
+    :findable: false
+    :sql: text
+    :patterns:
+      - !ruby/regexp /_date\z/
+  :updated:
+    :definition: "TIMESTAMP WITH TIME ZONE NOT NULL"
+    :priority: 10
+    :creatable: false
+    :updatable: false
+    :findable: false
+    :templates: ["sql/columns/updated"]
+    :sql: text
+    :patterns:
+      - !ruby/regexp /updated?_(at|on|time)\z/
+      - !ruby/regexp /\Atime_updated\z/
+  :foreign_key:
+    :definition: "INTEGER NOT NULL"
+    :priority: 10
+    :templates: ["sql/index", "sql/columns/foreign_key"]
+    :creatable: true
+    :updatable: true
+    :findable: true
+    :sql: integer
+    :patterns:
+      - !ruby/regexp /_id\z/
