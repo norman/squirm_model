@@ -66,6 +66,17 @@ module Squirm
       end
     end
 
+    def exec(query, &block)
+      Squirm.exec query do |result|
+        result.map do |hash|
+          instance = allocate
+          instance.instance_variable_set :@__attributes, hash
+          yield instance if block_given?
+          instance
+        end
+      end
+    end
+
     def to_ddl
       buffer = []
       table = Squirm::Migrator::Table.new(name.downcase)
